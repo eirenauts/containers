@@ -15,9 +15,9 @@ ARG TERRAFORM_VERSION=${TERRAFORM_VERSION:-0.14.2}
 LABEL \
     \
     \
-    org.opencontainers.image.title="eirenauts/super-ops"                             \
+    org.opencontainers.image.title="super-ops"                                       \
     org.opencontainers.image.description="A bundle docker image for CI/CD ops"       \
-    org.opencontainers.image.url=""                                                  \
+    org.opencontainers.image.url="ghcr.io/eirnauts-infra/super-ops:${VERSION}"       \
     org.opencontainers.image.source="https://github.com/eirenauts/containers"        \
     org.opencontainers.image.revision="${SHORT_SHA}"                                 \
     org.opencontainers.image.version="${VERSION}"                                    \

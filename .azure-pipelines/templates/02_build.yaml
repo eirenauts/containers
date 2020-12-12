@@ -1,0 +1,24 @@
+# @format
+---
+stages:
+  - stage: Build
+    displayName: Build images
+    condition: always()
+    dependsOn: []
+    jobs:
+      - job: build
+        displayName: Build images
+        condition: always()
+        steps:
+          - template: ../init_step.yaml
+
+          - task: Bash@3
+            displayName: Build super-ops image
+            inputs:
+              targetType: "inline"
+              workingDirectory: "$(Build.Repository.LocalPath)"
+              failOnStderr: false
+              noProfile: true
+              noRc: true
+              script: |
+                make build_super_ops

@@ -1,0 +1,24 @@
+# @format
+---
+stages:
+  - stage: Lint
+    displayName: Lint codebase
+    condition: always()
+    dependsOn: []
+    jobs:
+      - job: lint
+        displayName: Lint codebase
+        condition: always()
+        steps:
+          - template: ../init_step.yaml
+
+          - task: Bash@3
+            displayName: Lint codebase
+            inputs:
+              targetType: "inline"
+              workingDirectory: "$(Build.Repository.LocalPath)"
+              failOnStderr: true
+              noProfile: true
+              noRc: true
+              script: |
+                make lint_all

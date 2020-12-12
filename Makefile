@@ -9,7 +9,11 @@ SHELL := /bin/bash
 	init_docker_compose \
 	init_all \
 	format_all \
-	lint_all
+	lint_all \
+	build_super_ops \
+	push_super_ops \
+	get_image \
+	get_image_version
 
 ## Dependency installation targets
 
@@ -59,15 +63,35 @@ lint_all: init_all
 	./scripts/make.sh lint_shell
 	./scripts/make.sh lint_markdown
 
+get_image:
+	@./scripts/make.sh get_image super_ops
+
+get_image_version:
+	@./scripts/make.sh get_image_version
+
 build_super_ops:
-	if [[ -e .env ]]; then rm .env && touch .env; fi
 	./scripts/make.sh set_env_variables
 	docker-compose build super_ops
-	docker run --rm containers_super_ops /bin/bash -c 'echo "build ok"' || \
+	docker run \
+		--rm "$$(make -s get_image PARTIAL_IMAGE_NAME=super_ops)" \
+		/bin/bash -c 'echo "build ok"' || \
 		(echo "docker image is broken"; exit 1;)
+	docker image inspect \
+		"$$(make -s get_image PARTIAL_IMAGE_NAME=super_ops)"
 	rm .env
 
-push_super_ops: build_super_ops
-	# docker tag here to ghcr registry
-	# docker tag project_service
-	# docker push here to ghcr registry
+push_super_ops:
+	@if test -z "$(REGISTRY_TOKEN)"; then \
+		echo "env variable REGISTRY_TOKEN is required" && \
+		exit 1; \
+	fi;
+	docker tag \
+		"$$(make -s get_image PARTIAL_IMAGE_NAME=super_ops)" \
+		"ghcr.io/eirenauts-infra/super-ops:$$(make -s get_image_version)"
+	docker tag \
+		"$$(make -s get_image PARTIAL_IMAGE_NAME=super_ops)" \
+		"ghcr.io/eirenauts-infra/super-ops:latest"
+	echo "${REGISTRY_TOKEN}" | docker login ghcr.io -u eirenauts-infra --password-stdin
+	docker push "ghcr.io/eirenauts-infra/super-ops:$$(make -s get_image_version)"
+	docker push "ghcr.io/eirenauts-infra/super-ops:latest"
+	docker logout ghcr.io
