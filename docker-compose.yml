@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  super_ops:
+    build:
+      context: ./images
+      dockerfile: Ops.Dockerfile
+      args:
+        SHORT_SHA: ${SHORT_SHA}
+        VERSION: ${VERSION}
+        AZ_CLI_VERSION: ${AZ_CLI_VERSION}
+        JQ_VERSION: ${JQ_VERSION}
+        SOPS_VERSION: ${SOPS_VERSION}
+        GOLANG_VERSION: ${GOLANG_VERSION}
+        SHFMT_VERSION: ${SHFMT_VERSION}
+        SHELLCHECK_VERSION: ${SHELLCHECK_VERSION}
+        YAMLLINT_VERSION: ${YAMLLINT_VERSION}
+        HELM_VERSION: ${HELM_VERSION}
+        TERRAFORM_VERSION: ${TERRAFORM_VERSION}
