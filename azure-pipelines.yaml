@@ -9,6 +9,8 @@ trigger:
     include:
       - "*"
 
+pr: false
+
 pool:
   vmImage: ubuntu-20.04
 
