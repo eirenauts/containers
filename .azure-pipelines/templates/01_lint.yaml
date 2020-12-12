@@ -3,7 +3,7 @@
 stages:
   - stage: Lint
     displayName: Lint codebase
-    condition: always()
+    condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), always())
     dependsOn: []
     jobs:
       - job: lint
