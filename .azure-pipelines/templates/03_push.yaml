@@ -1,0 +1,51 @@
+# @format
+---
+stages:
+  - stage: Push
+    displayName: Push images to container registry
+    condition: and(contains(variables['build.sourceBranch'], 'refs/heads/master'), always())
+    dependsOn: []
+    jobs:
+      - deployment: push_approval
+        displayName: Approval for push to registry
+        dependsOn: []
+        continueOnError: false
+        timeoutInMinutes: 1296000
+        cancelTimeoutInMinutes: 1296000
+        environment: "Push Images"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: echo "approval required"
+
+      - job: push
+        displayName: Push images to container registry
+        dependsOn: [push_approval]
+        condition: succeeded()
+        steps:
+          - template: ../init_step.yaml
+
+          - task: Bash@3
+            displayName: Build super-ops image
+            inputs:
+              targetType: "inline"
+              workingDirectory: "$(Build.Repository.LocalPath)"
+              failOnStderr: false
+              noProfile: true
+              noRc: true
+              script: |
+                make build_super_ops
+
+          - task: Bash@3
+            displayName: Push super-ops image
+            inputs:
+              targetType: "inline"
+              workingDirectory: "$(Build.Repository.LocalPath)"
+              failOnStderr: false
+              noProfile: true
+              noRc: true
+              script: |
+                make push_super_ops
+            env:
+              REGISTRY_TOKEN: $(registryToken)

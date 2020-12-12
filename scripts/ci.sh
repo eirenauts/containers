@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck shell=bash disable=SC1090
 
 function install_yarn() {
     sudo apt update -y -qq && sudo apt install -y -qq curl gnupg &&
@@ -8,6 +9,79 @@ function install_yarn() {
         sudo apt update -y -qq && sudo apt install -y -qq yarn &&
         yarn --version &&
         yarn install --frozen-lockfile
+}
+
+function install_golang() {
+    local release=$1
+
+    if [[ -z "${release}" ]]; then
+        release=1.15.6
+    fi
+
+    if [ -z "$(command -v wget)" ]; then
+        sudo apt-get install -y -qq wget
+    fi
+
+    wget --quiet "https://dl.google.com/go/go${release}.linux-amd64.tar.gz"
+
+    if [[ -d /usr/local/go ]]; then
+        sudo rm -R /usr/local/go
+    fi
+
+    sudo tar -C /usr/local -xzf go${release}.linux-amd64.tar.gz &&
+        echo "export PATH=$PATH:/usr/local/go/bin" >>"${HOME}/.bash_profile" &&
+        echo "export GOPATH=${HOME}/go" >>"${HOME}/.bash_profile" &&
+        echo "export GOROOT=/usr/local/go" >>"${HOME}/.bash_profile" &&
+        source "${HOME}/.bash_profile" &&
+        go version
+}
+
+function install_shfmt() {
+    local release=$1
+    local goos
+    local goarch
+
+    goarch="$(go env GOARCH)"
+    goos="$(go env GOOS)"
+
+    if [[ -z "${release}" ]]; then
+        release=3.2.1
+    fi
+
+    if [ -z "$(command -v git)" ]; then
+        sudo apt-get install -y -qq git
+    fi
+
+    GOPATH=${GOPATH:-${HOME}/go} &&
+        GOOS="${goos}" GOARCH="${goarch}" \
+            GO111MODULE=on go get "mvdan.cc/sh/v3/cmd/shfmt@v${release}" &&
+        sudo mv "${GOPATH}/bin/shfmt" /usr/local/bin/shfmt &&
+        shfmt --version
+}
+
+function install_shellcheck() {
+    local release=$1
+    local shellcheck_url
+    shellcheck_url=https://github.com/koalaman/shellcheck/releases/download
+
+    if [[ -z "${release}" ]]; then
+        release=0.7.1
+    fi
+
+    if [ -z "$(command -v wget)" ]; then
+        sudo apt-get install -y -qq wget
+    fi
+
+    wget --quiet "${shellcheck_url}/v${release}/shellcheck-v${release}.linux.x86_64.tar.xz" &&
+        sudo tar \
+            -C /usr/local/bin \
+            -xf shellcheck-v${release}.linux.x86_64.tar.xz &&
+        sudo mv \
+            /usr/local/bin/shellcheck-v${release}/shellcheck \
+            /usr/local/bin/shellcheck &&
+        sudo chmod +x /usr/local/bin/shellcheck &&
+        sudo rm -R /usr/local/bin/shellcheck-v${release} &&
+        shellcheck --version
 }
 
 function install_docker() {
@@ -66,22 +140,73 @@ function lint_markdown() {
     yarn markdownlint ./**/*.md
 }
 
-function build_image() {
-    local args="${1}"
+function get_image() {
+    local filter="${1}"
 
-    docker build ${args} ./
+    docker image ls --filter reference="*_${filter}" | awk 'NR==2{print $1}'
+}
+
+function get_branch_from_azure_devops_ci() {
+    if [[ -n "${SYSTEM_PULLREQUEST_SOURCEBRANCH}" ]]; then
+        sed --regexp-extended 's|refs/heads/||g' <<<"${SYSTEM_PULLREQUEST_SOURCEBRANCH}"
+    elif [[ -n "${BUILD_SOURCEBRANCH}" ]]; then
+        sed --regexp-extended 's|refs/heads/||g' <<<"${BUILD_SOURCEBRANCH}"
+    fi
+}
+
+function get_git_branch() {
+    if [[ -z "$(get_branch_from_azure_devops_ci)" ]]; then
+        git branch --show-current
+    else
+        get_branch_from_azure_devops_ci
+    fi
+}
+
+function get_redacted_git_branch() {
+    sed --regexp-extended 's|\W|-|g' <<<"$(get_git_branch)"
+}
+
+function get_short_sha() {
+    git rev-parse --short --quiet HEAD
+}
+
+function get_git_tag() {
+    git describe --abbrev=0 --tags 2>/dev/null || echo ""
+}
+
+function get_image_version() {
+    local branch
+    local short_sha
+    local git_tag
+
+    branch="$(get_redacted_git_branch)"
+    short_sha="$(get_short_sha)"
+    git_tag="$(get_git_tag)"
+
+    if [[ -z "${git_tag}" ]]; then
+        echo "${branch}-${short_sha}"
+    else
+        echo "${git_tag}"
+    fi
 }
 
 function set_env_variables() {
-    echo "SHORT_SHA=$(git rev-parse --short --quiet HEAD || echo "master")" >>.env
-    echo "VERSION=$(git describe --abbrev=0 --tags 2>/dev/null || echo "latest")" >>.env
-    echo "AZ_CLI_VERSION=${AZ_CLI_VERSION:-2.16.0}" >>.env
-    echo "JQ_VERSION=${JQ_VERSION:-1.6}" >>.env
-    echo "SOPS_VERSION=${SOPS_VERSION:-3.6.1}" >>.env
-    echo "GOLANG_VERSION=${GOLANG_VERSION:-1.15.6}" >>.env
-    echo "SHFMT_VERSION=${SHFMT_VERSION:-3.2.1}" >>.env
-    echo "SHELLCHECK_VERSION=${SHELLCHECK_VERSION:-0.7.1}" >>.env
-    echo "YAMLLINT_VERSION=${YAMLLINT_VERSION:-1.25.0}" >>.env
-    echo "HELM_VERSION=${HELM_VERSION:-3.4.1}" >>.env
-    echo "TERRAFORM_VERSION=${TERRAFORM_VERSION:-0.14.2}" >>.env
+    if [[ -e .env ]]; then
+        rm .env &&
+            touch .env
+    fi
+
+    {
+        echo "SHORT_SHA=$(get_short_sha)"
+        echo "VERSION=$(get_image_version)"
+        echo "AZ_CLI_VERSION=${AZ_CLI_VERSION:-2.16.0}"
+        echo "JQ_VERSION=${JQ_VERSION:-1.6}"
+        echo "SOPS_VERSION=${SOPS_VERSION:-3.6.1}"
+        echo "GOLANG_VERSION=${GOLANG_VERSION:-1.15.6}"
+        echo "SHFMT_VERSION=${SHFMT_VERSION:-3.2.1}"
+        echo "SHELLCHECK_VERSION=${SHELLCHECK_VERSION:-0.7.1}"
+        echo "YAMLLINT_VERSION=${YAMLLINT_VERSION:-1.25.0}"
+        echo "HELM_VERSION=${HELM_VERSION:-3.4.1}"
+        echo "TERRAFORM_VERSION=${TERRAFORM_VERSION:-0.14.2}"
+    } >>.env
 }

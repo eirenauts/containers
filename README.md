@@ -1,5 +1,7 @@
 # containers
 
+[![Build Status](https://dev.azure.com/eirenauts/containers/_apis/build/status/eirenauts.containers?branchName=master)](https://dev.azure.com/eirenauts/containers/_build/latest?definitionId=1&branchName=master)
+
 This repository is a collection of build files for disparate container images.
 
 ## List of Images
@@ -10,9 +12,9 @@ This repository is a collection of build files for disparate container images.
 
 ## Image pull commands
 
-| Image Name | Docker pull command                            |
-| ---------- | ---------------------------------------------- |
-| super-ops  | docker pull ghcr.io/eirenauts/super-ops:latest |
+| Image Name | Docker pull command                                  |
+| ---------- | ---------------------------------------------------- |
+| super-ops  | docker pull ghcr.io/eirenauts-infra/super-ops:latest |
 
 ## Licence
 
