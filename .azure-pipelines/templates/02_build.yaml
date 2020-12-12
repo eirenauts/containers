@@ -3,7 +3,7 @@
 stages:
   - stage: Build
     displayName: Build images
-    condition: always()
+    condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), always())
     dependsOn: []
     jobs:
       - job: build
