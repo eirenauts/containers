@@ -73,14 +73,14 @@ function install_shellcheck() {
     fi
 
     wget --quiet "${shellcheck_url}/v${release}/shellcheck-v${release}.linux.x86_64.tar.xz" &&
-        sudo tar \
-            -C /usr/local/bin \
+        tar \
+            -C ./ \
             -xf shellcheck-v${release}.linux.x86_64.tar.xz &&
         sudo mv \
-            /usr/local/bin/shellcheck-v${release}/shellcheck \
+            ./shellcheck-v${release}/shellcheck \
             /usr/local/bin/shellcheck &&
         sudo chmod +x /usr/local/bin/shellcheck &&
-        sudo rm -R /usr/local/bin/shellcheck-v${release} &&
+        sudo rm -R ./shellcheck-v${release} &&
         shellcheck --version
 }
 

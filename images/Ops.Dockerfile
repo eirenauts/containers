@@ -113,10 +113,10 @@ RUN \
     echo "Commencing installation of shellcheck" && \
     wget --quiet "${SHELLCHECK_DOWNLOAD_URL}/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" && \
     tar \
-        -C /usr/local/bin \
+        -C ./ \
         -xf shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz && \
     mv \
-        /usr/local/bin/shellcheck-v${SHELLCHECK_VERSION}/shellcheck \
+        ./shellcheck-v${SHELLCHECK_VERSION}/shellcheck \
         /usr/local/bin/shellcheck && \
     chmod +x /usr/local/bin/shellcheck && \
     echo "Finished installation of shellcheck" && \
