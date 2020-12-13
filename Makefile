@@ -93,12 +93,12 @@ push_super_ops:
 	fi;
 	docker tag \
 		"$$(make -s get_image PARTIAL_IMAGE_NAME=super_ops)" \
-		"ghcr.io/eirenauts-infra/super-ops:$$(make -s get_image_version)"
+		"ghcr.io/eirenauts/super-ops:$$(make -s get_image_version)"
 	docker tag \
 		"$$(make -s get_image PARTIAL_IMAGE_NAME=super_ops)" \
-		"ghcr.io/eirenauts-infra/super-ops:latest"
-	echo "${REGISTRY_TOKEN}" | docker login ghcr.io -u eirenauts-infra --password-stdin
-	docker push "ghcr.io/eirenauts-infra/super-ops:$$(make -s get_image_version)"
-	docker push "ghcr.io/eirenauts-infra/super-ops:latest"
+		"ghcr.io/eirenauts/super-ops:latest"
+	echo "${REGISTRY_TOKEN}" | docker login ghcr.io -u eirenauts --password-stdin
+	docker push "ghcr.io/eirenauts/super-ops:$$(make -s get_image_version)"
+	docker push "ghcr.io/eirenauts/super-ops:latest"
 	docker logout ghcr.io
 	if [[ -e /home/vsts/.docker/config.json ]]; then rm /home/vsts/.docker/config.json; fi

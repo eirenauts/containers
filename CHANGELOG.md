@@ -1,7 +1,28 @@
 # Changelog
 
-**_Note:_**
-Follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)
+**_Please follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)_**
+
+## 1.0.0 (13.12.2020)
+
+**_Added_**
+
+- Images `1.0.0` and upwards will now be available from the `eirenauts` container
+  registry. See [packages](https://github.com/orgs/eirenauts/packages/container/package/super-ops) [eirenauts/containers#6]
+
+**_Removed_**
+
+- Removed the old container registry `eirenauts-infra` due to difficulties making it
+  public. [eirenauts/containers#6]
+
+**_Deprecated_**
+
+- Images `0.1.1` and `0.1.0` will no longer be available. [eirenauts/containers#6]
+
+[eirenauts/containers#6]: https://github.com/eirenauts/containers/pull/6
+
+**_Fixed_**
+
+- Silent failure of shellcheck installation fixed [eirenauts/containers#5]
 
 ## 0.1.1 (13.12.2020)
 
