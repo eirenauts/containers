@@ -3,6 +3,14 @@
 **_Note:_**
 Follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)
 
+## 0.1.1 (13.12.2020)
+
+### Added
+
+- Added Hadolint for linting Dockerfiles [eirenauts/containers#5]
+
+[eirenauts/containers#5]: https://github.com/eirenauts/containers/pull/5
+
 ## 0.1.0 (13.12.2020)
 
 This is the first release of `eirenauts/containers`

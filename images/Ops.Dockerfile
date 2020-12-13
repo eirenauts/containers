@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:focal-20201106
 
 ARG SHORT_SHA
 ARG VERSION
@@ -9,6 +9,7 @@ ARG GOLANG_VERSION=${GOLANG_VERSION:-1.15.6}
 ARG SHFMT_VERSION=${SHFMT_VERSION:-3.2.1}
 ARG SHELLCHECK_VERSION=${SHELLCHECK_VERSION:-0.7.1}
 ARG YAMLLINT_VERSION=${YAMLLINT_VERSION:-1.25.0}
+ARG HADOLINT_VERSION=${HADOLINT_VERSION:-1.19.0}
 ARG HELM_VERSION=${HELM_VERSION:-3.4.1}
 ARG TERRAFORM_VERSION=${TERRAFORM_VERSION:-0.14.2}
 
@@ -29,6 +30,7 @@ ENV \
     \
     SOPS_DOWNLOAD_URL=https://github.com/mozilla/sops/releases/download \
     SHELLCHECK_DOWNLOAD_URL=https://github.com/koalaman/shellcheck/releases/download \
+    HADOLINT_DOWNLOAD_URL=https://github.com/hadolint/hadolint/releases/download \
     TERRAFORM_DOWNLOAD_URL=https://releases.hashicorp.com/terraform \
     PATH=$PATH:/usr/local/go/bin \
     GOROOT=/usr/local/go \
@@ -38,23 +40,24 @@ ENV \
     DEBIAN_FRONTEND=noninteractive \
     TZ=Etc/UTC
 
+SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
 RUN \
     \
     \
     echo "Commencing install of the locales" && \
     apt-get update -y -qq && \
-    apt-get install -y -qq locales && \
+    apt-get install -y -qq --no-install-recommends locales=2.31-0ubuntu9.1 && \
     localedef -i ${REGION} -c -f UTF-8 -A /usr/share/locale/locale.alias ${LANG} && \
     echo "Finishing install of the locales" && \
     \
     \
     echo "Commencing install of the azure cli" && \
-    apt-get install -y -qq \
-        lsb-release \
-        ca-certificates \
-        curl \
-        apt-transport-https \
-        gnupg && \
+    apt-get install -y -qq --no-install-recommends \
+        lsb-release=11.1.0ubuntu2 \
+        ca-certificates=20201027ubuntu0.20.04.1 \
+        curl=7.68.0-1ubuntu2.4 \
+        apt-transport-https=2.0.2ubuntu0.2 \
+        gnupg=2.2.19-3ubuntu2 && \
     curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
         gpg --dearmor | \
             tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg >/dev/null && \
@@ -65,12 +68,12 @@ RUN \
       apt-cache madison azure-cli | grep "${AZ_CLI_VERSION}" | awk 'NR==1 {print $3}' \
     )" && \
     echo "Installaing azure cli version ${az_cli_version}" && \
-    apt-get install -y -qq "azure-cli=${az_cli_version}" && \
+    apt-get install -y -qq --no-install-recommends "azure-cli=${az_cli_version}" && \
     echo "Finished installation of the azure cli" && \
     \
     \
     echo "Commencing installation of jq" && \
-    apt-get install -y -qq wget && \
+    apt-get install -y -qq --no-install-recommends wget=1.20.3-1ubuntu1 && \
     wget --quiet "https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-linux64" && \
     chmod +x jq-linux64 && \
     mv jq-linux64 /usr/local/bin/jq && \
@@ -87,7 +90,7 @@ RUN \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | \
         tee /etc/apt/sources.list.d/yarn.list && \
-    apt update -y -qq && apt install -y -qq yarn && \
+    apt-get update -y -qq && apt-get install -y -qq --no-install-recommends yarn=1.22.5-1 && \
     echo "Finished installation of the yarn" && \
     \
     \
@@ -99,7 +102,7 @@ RUN \
     \
     \
     echo "Commencing installation of shfmt" && \
-    apt-get install -y -qq git && \
+    apt-get install -y -qq --no-install-recommends git=1:2.25.1-1ubuntu3 && \
     GOOS="$(go env GOOS)" \
     GOARCH="$(go env GOARCH)" \
     GO111MODULE=on go get "mvdan.cc/sh/v3/cmd/shfmt@v${SHFMT_VERSION}" && \
@@ -120,9 +123,16 @@ RUN \
     \
     \
     echo "Commencing installation of yamllint" && \
-    apt-get install -y -qq python3-pip && \
+    apt-get install -y -qq --no-install-recommends python3-pip=20.0.2-5ubuntu1.1 && \
     pip3 install "yamllint==${YAMLLINT_VERSION}" && \
     echo "Finished installation of yamllint" && \
+    \
+    \
+    echo "Commencing installation of hadolint" && \
+    wget --quiet "${HADOLINT_DOWNLOAD_URL}/v${HADOLINT_VERSION}/hadolint-Linux-x86_64" && \
+    chmod +x hadolint-Linux-x86_64 && \
+    mv hadolint-Linux-x86_64 /usr/local/bin/hadolint && \
+    echo "Finished installation of hadonlint" && \
     \
     \
     echo "Commencing installation of helm" && \
@@ -134,7 +144,7 @@ RUN \
     \
     echo "Commencing installation of terraform" && \
     wget --quiet "${TERRAFORM_DOWNLOAD_URL}/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" && \
-    apt-get install -y -qq unzip && \
+    apt-get install -y -qq --no-install-recommends unzip=6.0-25ubuntu1 && \
     unzip "terraform_${TERRAFORM_VERSION}_linux_amd64.zip" && \
     chmod +x terraform && \
     mv terraform /usr/local/bin/terraform && \
