@@ -6,15 +6,9 @@ This repository is a collection of build files for disparate container images.
 
 ## List of Images
 
-| Image Name | Base Image   | Purpose                                  | Key Dependencies                                                  |
-| ---------- | ------------ | ---------------------------------------- | ----------------------------------------------------------------- |
-| super-ops  | ubuntu:20.04 | An infrastructure as code focussed image | azure-cli, jq, sops, yarn, go, shfmt, shellcheck, helm, terraform |
-
-## Image pull commands
-
-| Image Name | Docker pull command                                  |
-| ---------- | ---------------------------------------------------- |
-| super-ops  | docker pull ghcr.io/eirenauts-infra/super-ops:latest |
+| Image                                                                                      | Base Image   | Purpose                                  | Key Dependencies                                                  |
+| ------------------------------------------------------------------------------------------ | ------------ | ---------------------------------------- | ----------------------------------------------------------------- |
+| [super-ops](https://github.com/users/eirenauts-infra/packages/container/package/super-ops) | ubuntu:20.04 | An infrastructure as code focussed image | azure-cli, jq, sops, yarn, go, shfmt, shellcheck, helm, terraform |
 
 ## Licence
 
