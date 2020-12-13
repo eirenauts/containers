@@ -5,7 +5,7 @@ Follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)
 
 ## 0.1.1 (13.12.2020)
 
-### Added
+**_Added_**
 
 - Added Hadolint for linting Dockerfiles [eirenauts/containers#5]
 
@@ -15,7 +15,7 @@ Follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)
 
 This is the first release of `eirenauts/containers`
 
-### Added
+**_Added_**
 
 - Scaffolding CI/CD and targets with bash and make [eirenauts/containers#1]
 - Write Ops Dockerfile intended for use with infrastructure as code [eirenauts/containers#1]
