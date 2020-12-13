@@ -3,7 +3,10 @@
 stages:
   - stage: Build
     displayName: Build images
-    condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), always())
+    condition: and(
+      ne(variables['Build.SourceBranch'], 'refs/heads/master'),
+      not(startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+      )
     dependsOn: []
     jobs:
       - job: build

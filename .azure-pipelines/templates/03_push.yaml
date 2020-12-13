@@ -3,7 +3,10 @@
 stages:
   - stage: Push
     displayName: Push images to container registry
-    condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), always())
+    condition: or(
+      eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+      startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+      )
     dependsOn: []
     jobs:
       - deployment: push_approval
