@@ -6,5 +6,6 @@ set -e
 set -o pipefail
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/ci.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/ops.sh"
 
 "$@"

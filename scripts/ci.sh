@@ -73,14 +73,14 @@ function install_shellcheck() {
     fi
 
     wget --quiet "${shellcheck_url}/v${release}/shellcheck-v${release}.linux.x86_64.tar.xz" &&
-        sudo tar \
-            -C /usr/local/bin \
+        tar \
+            -C ./ \
             -xf shellcheck-v${release}.linux.x86_64.tar.xz &&
         sudo mv \
-            /usr/local/bin/shellcheck-v${release}/shellcheck \
+            ./shellcheck-v${release}/shellcheck \
             /usr/local/bin/shellcheck &&
         sudo chmod +x /usr/local/bin/shellcheck &&
-        sudo rm -R /usr/local/bin/shellcheck-v${release} &&
+        sudo rm -R ./shellcheck-v${release} &&
         shellcheck --version
 }
 
@@ -115,6 +115,21 @@ function install_docker_compose() {
         docker-compose --version
 }
 
+function install_hadolint() {
+    local release="${1}"
+    local download_url
+    download_url=https://github.com/hadolint/hadolint/releases/download
+
+    if [[ -z "${release}" ]]; then
+        release=1.19.0
+    fi
+
+    wget --quiet "${download_url}/v${release}/hadolint-Linux-x86_64" &&
+        chmod +x hadolint-Linux-x86_64 &&
+        sudo mv hadolint-Linux-x86_64 /usr/local/bin/hadolint &&
+        hadolint --version
+}
+
 function format_yaml() {
     yarn prettier --write ./**/*.y*ml
 }
@@ -138,6 +153,14 @@ function lint_shell() {
 
 function lint_markdown() {
     yarn markdownlint ./**/*.md
+}
+
+function lint_dockerfiles() {
+    hadolint \
+        --config .hadolint.yaml \
+        --ignore DL3009 \
+        --ignore DL4001 \
+        images/Ops.Dockerfile
 }
 
 function get_image() {
@@ -188,25 +211,4 @@ function get_image_version() {
     else
         echo "${git_tag}"
     fi
-}
-
-function set_env_variables() {
-    if [[ -e .env ]]; then
-        rm .env &&
-            touch .env
-    fi
-
-    {
-        echo "SHORT_SHA=$(get_short_sha)"
-        echo "VERSION=$(get_image_version)"
-        echo "AZ_CLI_VERSION=${AZ_CLI_VERSION:-2.16.0}"
-        echo "JQ_VERSION=${JQ_VERSION:-1.6}"
-        echo "SOPS_VERSION=${SOPS_VERSION:-3.6.1}"
-        echo "GOLANG_VERSION=${GOLANG_VERSION:-1.15.6}"
-        echo "SHFMT_VERSION=${SHFMT_VERSION:-3.2.1}"
-        echo "SHELLCHECK_VERSION=${SHELLCHECK_VERSION:-0.7.1}"
-        echo "YAMLLINT_VERSION=${YAMLLINT_VERSION:-1.25.0}"
-        echo "HELM_VERSION=${HELM_VERSION:-3.4.1}"
-        echo "TERRAFORM_VERSION=${TERRAFORM_VERSION:-0.14.2}"
-    } >>.env
 }

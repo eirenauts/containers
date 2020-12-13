@@ -7,6 +7,7 @@ SHELL := /bin/bash
 	init_shellcheck \
 	init_docker \
 	init_docker_compose \
+	init_hadolint \
 	init_all \
 	format_all \
 	lint_all \
@@ -43,13 +44,17 @@ init_docker_compose:
 		./scripts/make.sh install_docker_compose "${DOCKER_COMPOSE_VERSION}"; \
 	fi
 
+init_hadolint:
+	if [ -z "$$(command -v install_hadolint)" ]; then ./scripts/make.sh install_hadolint "${HADOLINT_VERSION}"; fi
+
 init_all: \
 	init_yarn \
 	init_go \
 	init_shfmt \
+	init_shellcheck \
 	init_docker \
 	init_docker_compose \
-	init_shellcheck
+	init_hadolint
 
 ## Code consistency/quality targets
 
@@ -62,6 +67,7 @@ lint_all: init_all
 	./scripts/make.sh lint_yaml
 	./scripts/make.sh lint_shell
 	./scripts/make.sh lint_markdown
+	./scripts/make.sh lint_dockerfiles
 
 get_image:
 	@./scripts/make.sh get_image super_ops
@@ -70,7 +76,7 @@ get_image_version:
 	@./scripts/make.sh get_image_version
 
 build_super_ops:
-	./scripts/make.sh set_env_variables
+	./scripts/make.sh set_env_variables_ops_dockerfile
 	docker-compose build super_ops
 	docker run \
 		--rm "$$(make -s get_image PARTIAL_IMAGE_NAME=super_ops)" \

@@ -3,11 +3,25 @@
 **_Note:_**
 Follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)
 
+## 0.1.1 (13.12.2020)
+
+**_Added_**
+
+- Added Hadolint for linting Dockerfiles [eirenauts/containers#5]
+
+[eirenauts/containers#5]: https://github.com/eirenauts/containers/pull/5
+
+**_Fixed_**
+
+- Silent failure of shellcheck installation fixed [eirenauts/containers#5]
+
+[eirenauts/containers#5]: https://github.com/eirenauts/containers/pull/5
+
 ## 0.1.0 (13.12.2020)
 
 This is the first release of `eirenauts/containers`
 
-### Added
+**_Added_**
 
 - Scaffolding CI/CD and targets with bash and make [eirenauts/containers#1]
 - Write Ops Dockerfile intended for use with infrastructure as code [eirenauts/containers#1]
