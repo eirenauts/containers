@@ -95,3 +95,4 @@ push_super_ops:
 	docker push "ghcr.io/eirenauts-infra/super-ops:$$(make -s get_image_version)"
 	docker push "ghcr.io/eirenauts-infra/super-ops:latest"
 	docker logout ghcr.io
+	if [[ -e /home/vsts/.docker/config.json ]]; then rm /home/vsts/.docker/config.json; fi
