@@ -111,6 +111,7 @@ RUN \
     \
     \
     echo "Commencing installation of shellcheck" && \
+    apt-get install -y -qq --no-install-recommends xz-utils=5.2.4-1ubuntu1 && \
     wget --quiet "${SHELLCHECK_DOWNLOAD_URL}/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" && \
     tar \
         -C ./ \
