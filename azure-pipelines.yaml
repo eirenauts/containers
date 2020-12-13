@@ -1,5 +1,7 @@
 # @format
 ---
+pr: none
+
 trigger:
   batch: false
   branches:
@@ -8,8 +10,6 @@ trigger:
   tags:
     include:
       - "*"
-
-pr: false
 
 pool:
   vmImage: ubuntu-20.04
