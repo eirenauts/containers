@@ -11,7 +11,7 @@
 **_Fixed_**
 
 - Fixed issue where git tag was erroneously picked up on git commits without tag resulting
-in overriding of the previously tagged image with latest untagged changes [eirenauts/containers#8]
+  in overriding of the previously tagged image with latest untagged changes [eirenauts/containers#8]
 
 [eirenauts/containers#7]: https://github.com/eirenauts/containers/pull/7
 [eirenauts/containers#8]: https://github.com/eirenauts/containers/pull/8
