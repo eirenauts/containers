@@ -194,7 +194,7 @@ function get_short_sha() {
 }
 
 function get_git_tag() {
-    git describe --abbrev=0 --tags 2>/dev/null || echo ""
+    git tag --points-at HEAD 2>/dev/null || echo ""
 }
 
 function get_image_version() {
