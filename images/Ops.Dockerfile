@@ -44,6 +44,12 @@ SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
 RUN \
     \
     \
+    echo "Commencing install of the build essential" && \
+    apt-get update -y -qq && \
+    apt-get install -y -qq --no-install-recommends build-essential=12.8ubuntu1.1 && \
+    echo "Finishing install of the build essential" && \
+    \
+    \
     echo "Commencing install of the locales" && \
     apt-get update -y -qq && \
     apt-get install -y -qq --no-install-recommends locales=2.31-0ubuntu9.1 && \
