@@ -2,6 +2,14 @@
 
 **_Please follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)_**
 
+## 1.1.0 (14.12.2020)
+
+**_Added_**
+
+- Dependency `build-essential` added for access to make in image `super-ops`. [eirenauts/containers#7]
+
+[eirenauts/containers#7]: https://github.com/eirenauts/containers/pull/7
+
 ## 1.0.0 (13.12.2020)
 
 **_Added_**
