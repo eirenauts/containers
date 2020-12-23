@@ -132,8 +132,7 @@ RUN \
     \
     \
     echo "Commencing installation of python3-venv and pip" && \
-    apt-get install -y -qq --no-install-recommends python3-venv=3.8.2-0ubuntu2 && \
-    apt-get install -y -qq --no-install-recommends python3-pip=20.0.2-5ubuntu1.1 && \
+    apt-get install -y -qq --no-install-recommends python3-venv=3.8.2-0ubuntu2 python3-pip=20.0.2-5ubuntu1.1 && \
     pip3 install "pip==${PIP_VERSION}" && \
     echo "Finished installation of python3-venv and pip" && \
     \
