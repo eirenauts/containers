@@ -20,7 +20,7 @@ stages:
             inputs:
               targetType: "inline"
               workingDirectory: "$(Build.Repository.LocalPath)"
-              failOnStderr: true
+              failOnStderr: false
               noProfile: true
               noRc: true
               script: |

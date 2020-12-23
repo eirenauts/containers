@@ -8,6 +8,7 @@ ARG SOPS_VERSION=${SOPS_VERSION:-3.6.1}
 ARG GOLANG_VERSION=${GOLANG_VERSION:-1.15.6}
 ARG SHFMT_VERSION=${SHFMT_VERSION:-3.2.1}
 ARG SHELLCHECK_VERSION=${SHELLCHECK_VERSION:-0.7.1}
+ARG PIP_VERSION=${PIP_VERSION:-20.3.3}
 ARG YAMLLINT_VERSION=${YAMLLINT_VERSION:-1.25.0}
 ARG HADOLINT_VERSION=${HADOLINT_VERSION:-1.19.0}
 ARG HELM_VERSION=${HELM_VERSION:-3.4.1}
@@ -130,8 +131,13 @@ RUN \
     echo "Finished installation of shellcheck" && \
     \
     \
+    echo "Commencing installation of python3-venv and pip" && \
+    apt-get install -y -qq --no-install-recommends python3-venv=3.8.2-0ubuntu2 python3-pip=20.0.2-5ubuntu1.1 && \
+    pip3 install "pip==${PIP_VERSION}" && \
+    echo "Finished installation of python3-venv and pip" && \
+    \
+    \
     echo "Commencing installation of yamllint" && \
-    apt-get install -y -qq --no-install-recommends python3-pip=20.0.2-5ubuntu1.1 && \
     pip3 install "yamllint==${YAMLLINT_VERSION}" && \
     echo "Finished installation of yamllint" && \
     \
