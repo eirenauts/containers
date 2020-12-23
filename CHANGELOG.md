@@ -6,23 +6,23 @@
 
 **_Added_**
 
-- Dependency `venv` added for image `super-ops`. [eirenauts/containers#9]
+- Dependency `venv` added for image `super-ops`. [eirenauts/containers#11]
 
-[eirenauts/containers#9]: https://github.com/eirenauts/containers/pull/9
+[eirenauts/containers#11]: https://github.com/eirenauts/containers/pull/11
 
 ## 1.1.0 (14.12.2020)
 
 **_Added_**
 
-- Dependency `build-essential` added for access to make in image `super-ops`. [eirenauts/containers#7]
+- Dependency `build-essential` added for access to make in image `super-ops`. [eirenauts/containers#9]
 
 **_Fixed_**
 
 - Fixed issue where git tag was erroneously picked up on git commits without tag resulting
-  in overriding of the previously tagged image with latest untagged changes [eirenauts/containers#8]
+  in overriding of the previously tagged image with latest untagged changes [eirenauts/containers#10]
 
-[eirenauts/containers#7]: https://github.com/eirenauts/containers/pull/7
-[eirenauts/containers#8]: https://github.com/eirenauts/containers/pull/8
+[eirenauts/containers#9]: https://github.com/eirenauts/containers/pull/9
+[eirenauts/containers#10]: https://github.com/eirenauts/containers/pull/10
 
 ## 1.0.0 (13.12.2020)
 
