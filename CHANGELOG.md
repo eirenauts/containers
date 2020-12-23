@@ -2,6 +2,14 @@
 
 **_Please follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)_**
 
+## 1.2.0 (23.12.2020)
+
+**_Added_**
+
+- Dependency `venv` added for image `super-ops`. [eirenauts/containers#9]
+
+[eirenauts/containers#9]: https://github.com/eirenauts/containers/pull/9
+
 ## 1.1.0 (14.12.2020)
 
 **_Added_**
