@@ -13,6 +13,9 @@ ARG YAMLLINT_VERSION=${YAMLLINT_VERSION:-1.25.0}
 ARG HADOLINT_VERSION=${HADOLINT_VERSION:-1.19.0}
 ARG HELM_VERSION=${HELM_VERSION:-3.4.1}
 ARG TERRAFORM_VERSION=${TERRAFORM_VERSION:-0.14.2}
+ARG ANSIBLE_VERSION=${ANSIBLE_VERSION:-2.10.4}
+ARG JMESPATH_VERSION=${JMESPATH_VERSION:-0.10.0}
+ARG OPENSHIFT_VERSION=${OPENSHIFT_VERSION:-0.11.2}
 
 LABEL \
     \
@@ -162,7 +165,15 @@ RUN \
     unzip "terraform_${TERRAFORM_VERSION}_linux_amd64.zip" && \
     chmod +x terraform && \
     mv terraform /usr/local/bin/terraform && \
-    echo "Finished installation of terraform"
+    echo "Finished installation of terraform" && \
+    \
+    \
+    echo "Commencing installation of ansible and ansible k8s dependencies" && \
+    pip3 install ansible=="${ANSIBLE_VERSION}" && \
+    pip3 install jmespath=="${JMESPATH_VERSION}" && \
+    pip3 install openshift=="${OPENSHIFT_VERSION}" && \
+    ansible-galaxy collection install community.kubernetes && \
+    echo "Finished installation of ansible and ansible k8s dependencies"
 
 RUN \
     \

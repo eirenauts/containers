@@ -2,6 +2,14 @@
 
 **_Please follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)_**
 
+## 1.3.0 (23.12.2020)
+
+**_Added_**
+
+- Dependencies `ansible`, `jmespath`, `openshift` . [eirenauts/containers#12]
+
+[eirenauts/containers#12]: https://github.com/eirenauts/containers/pull/12
+
 ## 1.2.0 (23.12.2020)
 
 **_Added_**
