@@ -2,6 +2,14 @@
 
 **_Please follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)_**
 
+## 1.4.0 (28.12.2020)
+
+**_Added_**
+
+- Dependencies `yq` version 4.2.0. [eirenauts/containers#13]
+
+[eirenauts/containers#13]: https://github.com/eirenauts/containers/pull/13
+
 ## 1.3.0 (23.12.2020)
 
 **_Added_**

@@ -4,6 +4,7 @@ ARG SHORT_SHA
 ARG VERSION
 ARG AZ_CLI_VERSION=${AZ_CLI_VERSION:-2.16.0}
 ARG JQ_VERSION=${JQ_VERSION:-1.6}
+ARG YQ_VERSION=${YQ_VERSION:-4.2.0}
 ARG SOPS_VERSION=${SOPS_VERSION:-3.6.1}
 ARG GOLANG_VERSION=${GOLANG_VERSION:-1.15.6}
 ARG SHFMT_VERSION=${SHFMT_VERSION:-3.2.1}
@@ -87,7 +88,14 @@ RUN \
     wget --quiet "https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-linux64" && \
     chmod +x jq-linux64 && \
     mv jq-linux64 /usr/local/bin/jq && \
-    echo "Finished installation of the azure cli" && \
+    echo "Finished installation of jq" && \
+    \
+    \
+    echo "Commencing installation of yq" && \
+    wget --quiet "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64" && \
+    chmod +x yq_linux_amd64 && \
+    mv yq_linux_amd64 /usr/local/bin/yq && \
+    echo "Finished installation of jq" && \
     \
     \
     echo "Commencing installation of sops" && \
