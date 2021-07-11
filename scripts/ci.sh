@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck shell=bash disable=SC1090
+# shellcheck shell=bash disable=SC1090,SC1091
 
 function install_yarn() {
     sudo apt update -y -qq && sudo apt install -y -qq curl gnupg &&
@@ -160,6 +160,7 @@ function lint_dockerfiles() {
         --config .hadolint.yaml \
         --ignore DL3009 \
         --ignore DL4001 \
+        --ignore DL3059 \
         images/Ops.Dockerfile
 }
 

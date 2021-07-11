@@ -1,22 +1,23 @@
-FROM ubuntu:focal-20201106
+FROM ubuntu:focal-20210609
 
 ARG SHORT_SHA
 ARG VERSION
-ARG AZ_CLI_VERSION=${AZ_CLI_VERSION:-2.16.0}
+ARG AZ_CLI_VERSION=${AZ_CLI_VERSION:-2.26.0}
 ARG JQ_VERSION=${JQ_VERSION:-1.6}
-ARG YQ_VERSION=${YQ_VERSION:-4.2.0}
-ARG SOPS_VERSION=${SOPS_VERSION:-3.6.1}
-ARG GOLANG_VERSION=${GOLANG_VERSION:-1.15.6}
-ARG SHFMT_VERSION=${SHFMT_VERSION:-3.2.1}
-ARG SHELLCHECK_VERSION=${SHELLCHECK_VERSION:-0.7.1}
-ARG PIP_VERSION=${PIP_VERSION:-20.3.3}
-ARG YAMLLINT_VERSION=${YAMLLINT_VERSION:-1.25.0}
-ARG HADOLINT_VERSION=${HADOLINT_VERSION:-1.19.0}
-ARG HELM_VERSION=${HELM_VERSION:-3.4.1}
-ARG TERRAFORM_VERSION=${TERRAFORM_VERSION:-0.14.2}
-ARG ANSIBLE_VERSION=${ANSIBLE_VERSION:-2.10.4}
+ARG YQ_VERSION=${YQ_VERSION:-4.9.8}
+ARG SOPS_VERSION=${SOPS_VERSION:-3.7.1}
+ARG GOLANG_VERSION=${GOLANG_VERSION:-1.16.5}
+ARG SHFMT_VERSION=${SHFMT_VERSION:-3.3.0}
+ARG SHELLCHECK_VERSION=${SHELLCHECK_VERSION:-0.7.2}
+ARG PIP_VERSION=${PIP_VERSION:-21.1.3}
+ARG YAMLLINT_VERSION=${YAMLLINT_VERSION:-1.26.1}
+ARG HADOLINT_VERSION=${HADOLINT_VERSION:-2.6.0}
+ARG HELM_VERSION=${HELM_VERSION:-3.6.2}
+ARG TERRAFORM_VERSION=${TERRAFORM_VERSION:-1.0.2}
+ARG ANSIBLE_VERSION=${ANSIBLE_VERSION:-4.2.0}
 ARG JMESPATH_VERSION=${JMESPATH_VERSION:-0.10.0}
-ARG OPENSHIFT_VERSION=${OPENSHIFT_VERSION:-0.11.2}
+ARG OPENSHIFT_VERSION=${OPENSHIFT_VERSION:-0.12.1}
+ARG ANSIBLE_KUBERNETES_VERSION=${ANSIBLE_KUBERNETES_VERSION:-2.0.0}
 
 LABEL \
     \
@@ -57,7 +58,7 @@ RUN \
     \
     echo "Commencing install of the locales" && \
     apt-get update -y -qq && \
-    apt-get install -y -qq --no-install-recommends locales=2.31-0ubuntu9.1 && \
+    apt-get install -y -qq --no-install-recommends locales=2.31-0ubuntu9.2 && \
     localedef -i ${REGION} -c -f UTF-8 -A /usr/share/locale/locale.alias ${LANG} && \
     echo "Finishing install of the locales" && \
     \
@@ -65,10 +66,10 @@ RUN \
     echo "Commencing install of the azure cli" && \
     apt-get install -y -qq --no-install-recommends \
         lsb-release=11.1.0ubuntu2 \
-        ca-certificates=20201027ubuntu0.20.04.1 \
-        curl=7.68.0-1ubuntu2.4 \
+        ca-certificates=20210119~20.04.1 \
+        curl=7.68.0-1ubuntu2.5 \
         apt-transport-https=2.0.2ubuntu0.2 \
-        gnupg=2.2.19-3ubuntu2 && \
+        gnupg=2.2.19-3ubuntu2.1 && \
     curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
         gpg --dearmor | \
             tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg >/dev/null && \
@@ -121,7 +122,7 @@ RUN \
     \
     \
     echo "Commencing installation of shfmt" && \
-    apt-get install -y -qq --no-install-recommends git=1:2.25.1-1ubuntu3 && \
+    apt-get install -y -qq --no-install-recommends git=1:2.25.1-1ubuntu3.1 && \
     GOOS="$(go env GOOS)" \
     GOARCH="$(go env GOARCH)" \
     GO111MODULE=on go get "mvdan.cc/sh/v3/cmd/shfmt@v${SHFMT_VERSION}" && \
@@ -143,13 +144,13 @@ RUN \
     \
     \
     echo "Commencing installation of python3-venv and pip" && \
-    apt-get install -y -qq --no-install-recommends python3-venv=3.8.2-0ubuntu2 python3-pip=20.0.2-5ubuntu1.1 && \
-    pip3 install "pip==${PIP_VERSION}" && \
+    apt-get install -y -qq --no-install-recommends python3-venv=3.8.2-0ubuntu2 python3-pip=20.0.2-5ubuntu1.5 && \
+    pip3 install --no-cache-dir "pip==${PIP_VERSION}" && \
     echo "Finished installation of python3-venv and pip" && \
     \
     \
     echo "Commencing installation of yamllint" && \
-    pip3 install "yamllint==${YAMLLINT_VERSION}" && \
+    pip3 install --no-cache-dir "yamllint==${YAMLLINT_VERSION}" && \
     echo "Finished installation of yamllint" && \
     \
     \
@@ -177,10 +178,10 @@ RUN \
     \
     \
     echo "Commencing installation of ansible and ansible k8s dependencies" && \
-    pip3 install ansible=="${ANSIBLE_VERSION}" && \
-    pip3 install jmespath=="${JMESPATH_VERSION}" && \
-    pip3 install openshift=="${OPENSHIFT_VERSION}" && \
-    ansible-galaxy collection install community.kubernetes && \
+    pip3 install --no-cache-dir ansible=="${ANSIBLE_VERSION}" && \
+    pip3 install --no-cache-dir jmespath=="${JMESPATH_VERSION}" && \
+    pip3 install --no-cache-dir openshift=="${OPENSHIFT_VERSION}" && \
+    ansible-galaxy collection install "community.kubernetes:==${ANSIBLE_KUBERNETES_VERSION}" && \
     echo "Finished installation of ansible and ansible k8s dependencies"
 
 RUN \
