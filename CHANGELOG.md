@@ -2,13 +2,19 @@
 
 **_Please follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)_**
 
-## 2.0.0 (14.05.2023)
+## 3.0.0 (14.05.2023)
 
 **_Changed_**
 
 - Updated the base image of ubuntu to 22.04, `jammy`. [eirenauts/containers#15]
 - Updated multiple dependencies including a major version change
   for `nodejs`. [eirenauts/containers#15]
+
+## 2.0.0 (11.07.2021)
+
+**_Changed_**
+
+- Updated multiple dependencies. [eirenauts/containers#14]
 
 ## 1.4.0 (28.12.2020)
 
