@@ -54,7 +54,7 @@ function install_shfmt() {
 
     GOPATH=${GOPATH:-${HOME}/go} &&
         GOOS="${goos}" GOARCH="${goarch}" \
-            GO111MODULE=on go get "mvdan.cc/sh/v3/cmd/shfmt@v${release}" &&
+            GO111MODULE=on go install "mvdan.cc/sh/v3/cmd/shfmt@v${release}" &&
         sudo mv "${GOPATH}/bin/shfmt" /usr/local/bin/shfmt &&
         shfmt --version
 }
