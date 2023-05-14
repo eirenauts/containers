@@ -2,6 +2,14 @@
 
 **_Please follow the [keep a changelog conventions](https://keepachangelog.com/en/1.0.0/)_**
 
+## 2.0.0 (14.05.2023)
+
+**_Changed_**
+
+- Updated the base image of ubuntu to 22.04, `jammy`. [eirenauts/containers#15]
+- Updated multiple dependencies including a major version change
+  for `nodejs`. [eirenauts/containers#15]
+
 ## 1.4.0 (28.12.2020)
 
 **_Added_**
@@ -92,3 +100,14 @@ This is the first release of `eirenauts/containers`
 [eirenauts/containers#2]: https://github.com/eirenauts/containers/pull/2
 [eirenauts/containers#3]: https://github.com/eirenauts/containers/pull/3
 [eirenauts/containers#4]: https://github.com/eirenauts/containers/pull/4
+[eirenauts/containers#5]: https://github.com/eirenauts/containers/pull/5
+[eirenauts/containers#6]: https://github.com/eirenauts/containers/pull/6
+[eirenauts/containers#7]: https://github.com/eirenauts/containers/pull/7
+[eirenauts/containers#8]: https://github.com/eirenauts/containers/pull/8
+[eirenauts/containers#9]: https://github.com/eirenauts/containers/pull/9
+[eirenauts/containers#10]: https://github.com/eirenauts/containers/pull/10
+[eirenauts/containers#11]: https://github.com/eirenauts/containers/pull/11
+[eirenauts/containers#12]: https://github.com/eirenauts/containers/pull/12
+[eirenauts/containers#13]: https://github.com/eirenauts/containers/pull/13
+[eirenauts/containers#14]: https://github.com/eirenauts/containers/pull/14
+[eirenauts/containers#15]: https://github.com/eirenauts/containers/pull/15
