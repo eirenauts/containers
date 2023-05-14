@@ -77,7 +77,7 @@ get_image_version:
 
 build_super_ops:
 	./scripts/make.sh set_env_variables_ops_dockerfile
-	docker-compose build super_ops
+	docker-compose --env-file .env build super_ops
 	docker run \
 		--rm "$$(make -s get_image PARTIAL_IMAGE_NAME=super_ops)" \
 		/bin/bash -c 'echo "build ok"' || \

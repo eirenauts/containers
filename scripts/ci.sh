@@ -28,7 +28,7 @@ function install_golang() {
         sudo rm -R /usr/local/go
     fi
 
-    sudo tar -C /usr/local -xzf go${release}.linux-amd64.tar.gz &&
+    sudo tar -C /usr/local -xzf "go${release}.linux-amd64.tar.gz" &&
         echo "export PATH=$PATH:/usr/local/go/bin" >>"${HOME}/.bash_profile" &&
         echo "export GOPATH=${HOME}/go" >>"${HOME}/.bash_profile" &&
         echo "export GOROOT=/usr/local/go" >>"${HOME}/.bash_profile" &&
@@ -75,12 +75,12 @@ function install_shellcheck() {
     wget --quiet "${shellcheck_url}/v${release}/shellcheck-v${release}.linux.x86_64.tar.xz" &&
         tar \
             -C ./ \
-            -xf shellcheck-v${release}.linux.x86_64.tar.xz &&
+            -xf "shellcheck-v${release}.linux.x86_64.tar.xz" &&
         sudo mv \
-            ./shellcheck-v${release}/shellcheck \
+            "./shellcheck-v${release}/shellcheck" \
             /usr/local/bin/shellcheck &&
         sudo chmod +x /usr/local/bin/shellcheck &&
-        sudo rm -R ./shellcheck-v${release} &&
+        sudo rm -R "./shellcheck-v${release}" &&
         shellcheck --version
 }
 
@@ -167,7 +167,7 @@ function lint_dockerfiles() {
 function get_image() {
     local filter="${1}"
 
-    docker image ls --filter reference="*_${filter}" | awk 'NR==2{print $1}'
+    docker image ls --filter reference="*${filter}" | awk 'NR==2{print $1}'
 }
 
 function get_branch_from_azure_devops_ci() {
